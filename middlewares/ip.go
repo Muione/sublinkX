@@ -43,7 +43,7 @@ func GetIp(c *gin.Context) {
 		}
 		err = sub.Find()
 		if err != nil {
-			log.Println(err)
+			log.Printf("未找到订阅: %s, IP: %s, 地址: %s \n", subname, ip, ipinfo.Addr)
 			return
 		}
 		var iplog models.SubLogs
@@ -52,7 +52,8 @@ func GetIp(c *gin.Context) {
 		// 如果没有找到记录
 		if err != nil {
 			iploga := []models.SubLogs{
-				{IP: ip,
+				{
+					IP:            ip,
 					Addr:          ipinfo.Addr,
 					SubcriptionID: sub.ID,
 					Date:          time.Now().Format("2006-01-02 15:04:05"),
@@ -69,6 +70,7 @@ func GetIp(c *gin.Context) {
 			// 更新访问次数
 			iplog.Count++
 			iplog.Date = time.Now().Format("2006-01-02 15:04:05")
+			iplog.Addr = ipinfo.Addr
 			err = iplog.Update()
 			if err != nil {
 				log.Println(err)

@@ -54,7 +54,7 @@ func UserLogin(c *gin.Context) {
 	captchaKey := c.PostForm("captchaKey")
 	// 验证验证码
 	if !utils.VerifyCaptcha(captchaKey, captchaCode) {
-		log.Println("验证码错误")
+		log.Printf("验证码错误, IP: %s \n", c.ClientIP())
 		c.JSON(400, gin.H{
 			"msg": "验证码错误",
 		})
@@ -63,7 +63,7 @@ func UserLogin(c *gin.Context) {
 	user := &models.User{Username: username, Password: password}
 	err := user.Verify()
 	if err != nil {
-		log.Println("账号或者密码错误")
+		log.Printf("账号或者密码错误, IP: %s \n", c.ClientIP())
 		c.JSON(400, gin.H{
 			"msg": "账号或者密码错误",
 		})
