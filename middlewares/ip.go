@@ -43,11 +43,12 @@ func GetIp(c *gin.Context) {
 		}
 		err = sub.Find()
 		if err != nil {
-			log.Printf("未找到订阅: %s, IP: %s, 地址: %s \n", subname, ip, ipinfo.Addr)
+			log.Printf("访问不存在的订阅, IP: %s, 地址: %s \n", ip, ipinfo.Addr)
 			return
 		}
 		var iplog models.SubLogs
 		iplog.IP = ip
+		log.Printf("访问订阅: %s, IP: %s, 地址: %s \n", sub.Name, ip, ipinfo.Addr)
 		err = iplog.Find(sub.ID)
 		// 如果没有找到记录
 		if err != nil {
